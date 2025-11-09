@@ -1,0 +1,41 @@
+modLoader = "javafml"
+loaderVersion = "[${forge_loader_version},)"
+issueTrackerURL = "${issues}"
+license = "${license}"
+
+[[mods]]
+modId = "${modid}"
+version = "${version}"
+displayName = "${display_name}"
+displayUrl="${homepage}"
+authors = "${authors}"
+description = '''${description}'''
+logoFile = "${icon}"
+
+[[dependencies.${modid}]]
+modId = "forge"
+mandatory = true
+versionRange = "[${forge_dependency_version},)"
+ordering = "NONE"
+side = "SERVER"
+
+[[dependencies.${modid}]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${minecraft_version},)"
+ordering = "NONE"
+side = "SERVER"
+
+[[dependencies.${modid}]]
+modId = "architectury"
+mandatory = true
+versionRange = "[${architectury_api_version},)"
+ordering = "BEFORE"
+side = "SERVER"
+
+[[dependencies.${modid}]]
+modId = "create"
+mandatory = true
+versionRange = "[${create_forge_version_dependency},)"
+ordering = "BEFORE"
+side = "SERVER"

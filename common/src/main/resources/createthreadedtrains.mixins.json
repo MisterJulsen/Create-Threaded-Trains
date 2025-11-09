@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "de.mrjulsen.ctt.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [
+  ],
+  "mixins": [
+    "CarriageMixin",
+    "GlobalRailwayManagerAccessor",
+    "TrainMixin",
+    "CommonEventsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

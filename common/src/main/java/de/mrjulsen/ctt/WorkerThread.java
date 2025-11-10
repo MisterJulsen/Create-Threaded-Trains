@@ -1,6 +1,9 @@
 package de.mrjulsen.ctt;
 
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class WorkerThread {
 

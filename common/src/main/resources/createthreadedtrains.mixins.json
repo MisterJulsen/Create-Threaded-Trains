@@ -9,7 +9,8 @@
     "CarriageMixin",
     "GlobalRailwayManagerAccessor",
     "TrainMixin",
-    "CommonEventsMixin"
+    "CommonEventsMixin",
+    "MinecraftServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

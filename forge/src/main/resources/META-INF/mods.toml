@@ -22,7 +22,7 @@ side = "SERVER"
 [[dependencies.${modid}]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[${minecraft_version},)"
+versionRange = "[${minecraft_version},${next_unsupported_minecraft_version})"
 ordering = "NONE"
 side = "SERVER"
 

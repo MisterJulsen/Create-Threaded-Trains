@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 public class CommonEventsMixin {
 
     @Redirect(method = "onServerWorldTick", remap = false, at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/GlobalRailwayManager;tick(Lnet/minecraft/world/level/Level;)V", remap = false))
-    private static void disableGlobalManagerTick(GlobalRailwayManager manager, Level level) {
+    private static void disableGlobalManagerTickForge(GlobalRailwayManager manager, Level level) {
         // Disable default behaviour
 	}
 }

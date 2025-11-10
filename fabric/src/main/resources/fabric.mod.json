@@ -16,14 +16,14 @@
   },
   "license": "${license}",
   "icon": "${icon}",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "${maven_group}.fabric.${main_class_name}Fabric"
     ]
   },
   "mixins": [
-    "${modid}.fabric.mixins.json"
+    "${modid}.mixins.json"
   ],
   "depends": {
     "fabricloader": "*",
@@ -36,8 +36,7 @@
     "modmenu": {
       "links": {
         "Discord": "${discord}"
-      },
-      "update_checker": true
+      }
     }
   }
 }

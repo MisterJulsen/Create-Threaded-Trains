@@ -17,21 +17,21 @@ modId = "neoforge"
 type = "required"
 versionRange = "[21.0,)"
 ordering = "NONE"
-side = "SERVER"
+side = "BOTH"
 
 [[dependencies.createthreadedtrains]]
 modId = "minecraft"
 type = "required"
 versionRange = "[1.21,)"
 ordering = "NONE"
-side = "SERVER"
+side = "BOTH"
 
 [[dependencies.createthreadedtrains]]
 modId = "create"
 type = "required"
 versionRange = "[0.5.1.f,)"
 ordering = "BEFORE"
-side = "SERVER"
+side = "BOTH"
 
 [[mixins]]
 config = "createthreadedtrains.mixins.json"

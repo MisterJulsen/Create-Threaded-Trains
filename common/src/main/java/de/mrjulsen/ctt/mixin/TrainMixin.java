@@ -29,8 +29,8 @@ public class TrainMixin {
         }));
     }
     
-    @PlatformOnly(PlatformOnly.FORGE)
-    @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;m_254849_", remap = false))
+    @PlatformOnly("neoforge")
+    @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;explode", remap = false))
     private Explosion redirectTrainExplosionForge(Level level, Entity source, double x, double y, double z, float power, ExplosionInteraction interaction) {
         CreateThreadedTrains.getServer().ifPresent(s -> s.execute(() -> {            
             level.explode(source, x, y, z, power, interaction);

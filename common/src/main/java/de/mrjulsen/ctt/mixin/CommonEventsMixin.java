@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 @Mixin(CommonEvents.class)
 public class CommonEventsMixin {
 
-    @PlatformOnly(PlatformOnly.FORGE)
+    @PlatformOnly("neoforge")
     @Redirect(method = "onServerWorldTick", remap = false, at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/GlobalRailwayManager;tick(Lnet/minecraft/world/level/Level;)V", remap = false))
     private static void disableGlobalManagerTickForge(GlobalRailwayManager manager, Level level) {
         // Disable default behaviour

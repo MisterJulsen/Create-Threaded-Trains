@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 @Mixin(Carriage.class)
 public class CarriageMixin {
 
-    @PlatformOnly(PlatformOnly.FORGE)
+    @PlatformOnly("neoforge")
     @Redirect(method = "travel", remap = false, at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/entity/Carriage;manageEntities(Lnet/minecraft/world/level/Level;)V", remap = false))
     public void onTravelForge(Carriage carriage, Level level) {
         CreateThreadedTrains.getServer().ifPresent(x -> x.execute(() -> {

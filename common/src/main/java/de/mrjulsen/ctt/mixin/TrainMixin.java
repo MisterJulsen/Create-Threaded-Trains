@@ -11,6 +11,7 @@ import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 
 import de.mrjulsen.ctt.CreateThreadedTrains;
+import dev.architectury.injectables.annotations.PlatformOnly;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -27,12 +28,21 @@ public class TrainMixin {
         }));
     }
     
+    @PlatformOnly(PlatformOnly.FORGE)
     @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;m_46511_", remap = false))
-    private Explosion redirectTrainExplosion(Level level, Entity source, double x, double y, double z, float power, Explosion.BlockInteraction interaction) {
+    private Explosion redirectTrainExplosionForge(Level level, Entity source, double x, double y, double z, float power, Explosion.BlockInteraction interaction) {
         CreateThreadedTrains.getServer().ifPresent(s -> s.execute(() -> {            
             level.explode(source, x, y, z, power, interaction);
         }));
         return null; // Not needed, because Create doesn't use the explosion result.
-    }
+    }  
     
+    @PlatformOnly(PlatformOnly.FABRIC)
+    @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1937;method_8437", remap = false))
+    private Explosion redirectTrainExplosionFabric(Level level, Entity source, double x, double y, double z, float power, Explosion.BlockInteraction interaction) {
+        CreateThreadedTrains.getServer().ifPresent(s -> s.execute(() -> {            
+            level.explode(source, x, y, z, power, interaction);
+        }));
+        return null; // Not needed, because Create doesn't use the explosion result.
+    }        
 }

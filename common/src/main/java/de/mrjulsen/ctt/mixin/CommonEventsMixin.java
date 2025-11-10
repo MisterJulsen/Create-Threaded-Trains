@@ -20,7 +20,7 @@ public class CommonEventsMixin {
 	}
     
     @PlatformOnly(PlatformOnly.FABRIC)
-    @Redirect(method = "onWorldTick", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/GlobalRailwayManager;tick(Lnet/minecraft/world/level/Level;)V"))
+    @Redirect(method = "onServerWorldTick", at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/GlobalRailwayManager;tick(Lnet/minecraft/world/level/Level;)V"))
     private static void disableGlobalManagerTickFabric(GlobalRailwayManager manager, Level level) {
         // Disable default behaviour
 	}

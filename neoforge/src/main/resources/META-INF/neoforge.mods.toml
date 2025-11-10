@@ -1,0 +1,37 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = "https://github.com/MisterJulsen/Create-Threaded-Trains/issues"
+license = "GNU General Public License v3.0"
+
+[[mods]]
+modId = "createthreadedtrains"
+version = "1.0.0"
+displayName = "Create: Threaded Trains"
+displayUrl="https://www.curseforge.com/minecraft/mc-mods/create-threaded_trains"
+authors = "MrJulsen"
+description = '''Offloads the railway network ticks to a separate thread that runs in parallel to the server tick, greatly improving performance in large railway networks.'''
+logoFile = "icon.png"
+
+[[dependencies.createthreadedtrains]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.0,)"
+ordering = "NONE"
+side = "SERVER"
+
+[[dependencies.createthreadedtrains]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21,)"
+ordering = "NONE"
+side = "SERVER"
+
+[[dependencies.createthreadedtrains]]
+modId = "create"
+type = "required"
+versionRange = "[0.5.1.f,)"
+ordering = "BEFORE"
+side = "SERVER"
+
+[[mixins]]
+config = "createthreadedtrains.mixins.json"

@@ -1,5 +1,5 @@
 plugins {
-    id 'dev.architectury.loom' version '1.6-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
@@ -19,6 +19,7 @@ subprojects {
     apply plugin: 'maven-publish'
 
     base {
+        // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
         archivesName = "$rootProject.archives_name-$project.name"
     }
 
@@ -43,6 +44,8 @@ subprojects {
         maven { url = "https://dvs1.progwml6.com/files/maven/" } // JEI
         maven { url = "https://maven.blamejared.com/" } // JEI
         maven { url = "https://modmaven.dev" } // JEI
+        maven { url = 'https://maven.neoforged.net/releases' } // NeoForge
+        maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
         maven { url = "https://cursemaven.com"
             content {
                 includeGroup "curse.maven"
@@ -60,29 +63,24 @@ subprojects {
 
     processResources {
         def expandProps = [
-            "version": version,
-            "minecraft_version": rootProject.minecraft_version,
-            "issues": rootProject.issues,
-            "source": rootProject.source,
-            "license": rootProject.license,
-            "modid": rootProject.archives_name,
-            "display_name": rootProject.display_name,
-            "homepage": rootProject.homepage,
-            "authors": rootProject.authors,
-            "description": rootProject.description,
-            "icon": rootProject.icon,
-            "discord": rootProject.discord,
-            "next_unsupported_minecraft_version": rootProject.next_unsupported_minecraft_version,
-            "forge_dependency_version": rootProject.forge_dependency_version,
-            "forge_loader_version": rootProject.forge_loader_version,
-            "fabric_loader_version": rootProject.fabric_loader_version,
-            "java_version": rootProject.java_version,
-            "maven_group": rootProject.maven_group,
-            "create_forge_version": rootProject.create_forge_version,
-            "create_forge_version_dependency": rootProject.create_forge_version_dependency,
-            "create_fabric_version": rootProject.create_fabric_version,
-            "main_class_name": rootProject.main_class_name,
-            "architectury_api_version": rootProject.architectury_api_version,
+                "version": version,
+                "minecraft_version": rootProject.minecraft_version,
+                "issues": rootProject.issues,
+                "source": rootProject.source,
+                "license": rootProject.license,
+                "modid": rootProject.archives_name,
+                "display_name": rootProject.display_name,
+                "homepage": rootProject.homepage,
+                "authors": rootProject.authors,
+                "description": rootProject.description,
+                "icon": rootProject.icon,
+                "discord": rootProject.discord,
+                "neoforge_loader_version": rootProject.neoforge_loader_version,
+                "java_version": rootProject.java_version,
+                "maven_group": rootProject.maven_group,
+                "create_neoforge_version": rootProject.create_neoforge_version,
+                "create_neoforge_dependency_version": rootProject.create_neoforge_dependency_version,
+                "main_class_name": rootProject.main_class_name
         ]
         filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', 'createthreadedtrains.mixins.json']) {
             expand expandProps
@@ -93,14 +91,13 @@ subprojects {
 
     java {
         withSourcesJar()
-        withJavadocJar()
 
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     tasks.withType(JavaCompile).configureEach {
-        it.options.release = 17
+        it.options.release = 21
     }
 
     jar {
@@ -114,23 +111,6 @@ subprojects {
                     "Implementation-Vendor"   : "${rootProject.authors}",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
-        }
-    }
-
-    // Configure Maven publishing.
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                artifactId = rootProject.archives_name + "-" + project.name             
-                from components.java
-            }
-        }
-
-        repositories {
-            maven {
-                name "GitHub"
-                url "file://${System.getProperty('user.home')}/.m2/github/modsrepo/maven"
-            }
         }
     }
 }

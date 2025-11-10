@@ -27,13 +27,6 @@ ordering = "NONE"
 side = "SERVER"
 
 [[dependencies.${modid}]]
-modId = "architectury"
-mandatory = true
-versionRange = "[${architectury_api_version},)"
-ordering = "BEFORE"
-side = "SERVER"
-
-[[dependencies.${modid}]]
 modId = "create"
 mandatory = true
 versionRange = "[${create_forge_version_dependency},)"

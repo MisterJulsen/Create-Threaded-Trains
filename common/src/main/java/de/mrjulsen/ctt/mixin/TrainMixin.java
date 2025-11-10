@@ -14,7 +14,6 @@ import de.mrjulsen.ctt.CreateThreadedTrains;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.Level.ExplosionInteraction;
 
 @Mixin(Train.class)
 public class TrainMixin {
@@ -28,8 +27,8 @@ public class TrainMixin {
         }));
     }
     
-    @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;m_254849_", remap = false))
-    private Explosion redirectTrainExplosion(Level level, Entity source, double x, double y, double z, float power, ExplosionInteraction interaction) {
+    @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;m_46511_", remap = false))
+    private Explosion redirectTrainExplosion(Level level, Entity source, double x, double y, double z, float power, Explosion.BlockInteraction interaction) {
         CreateThreadedTrains.getServer().ifPresent(s -> s.execute(() -> {            
             level.explode(source, x, y, z, power, interaction);
         }));

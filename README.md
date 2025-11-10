@@ -1,36 +1,22 @@
-![Create: Pantographs and Wires](https://github.com/user-attachments/assets/d51b2e43-c03c-4628-91e9-e03cb23eb001)
+A small mod that runs all calculations of the railway network on a **separate thread** parallel to the server tick, which greatly improves performance, especially in large networks.
 
-⚡ **Create: Pantographs & Wires** is a mod which adds catenary wires, pantographs and more for electric modern trains in Create!
+This mod is server-side only, but it can also be used on the client-side (if you are playing in singleplayer).
 
-[![Discord](https://i.imgur.com/YnDoeHs.png)](https://discord.gg/AeSbNgvc7f)
+<img width="2430" height="757" alt="comparison" src="https://github.com/user-attachments/assets/366bda07-5e2f-49f2-a313-af1e70660617" />
 
-This mod breaks the rule of classic Create addons with its more realistic style and focuses on the part of the Create community that uses this mod to build impressive modern trains and railway networks. With the design and implementation inspired by [Immersive Engineering](https://www.curseforge.com/minecraft/mc-mods/immersive-engineering), here is a overview about the features in this mod.
+## ✅ Issues & Compatibility
+This mod should be compatible with most other addons and performance mods.
+No problems or limitations are known when using this mod. However, should any issues arise, this mod can be safely removed and everything will return to normal.
 
-## 🧩 Content
+## 🧩 How does it work?
+Usually, the railway network is calculated immediately after the other tasks of the server tick loop (e.g. BlockEntities, Entities, Players, Chunks, etc.). Under high server load, for example, due to many BlockEntities and a large rail network, this can result in very long tick times.
 
-*   Various masts that can be placed in any size and rotated at an angle of 22.5 degrees (approximately)
-*   Cantilevers with different sizes and insulator types
-*   Catenary Wire and Power lines
-*   Pantograph that automatically adjusts to the height of the catenary wire
+This mod starts calculating the railway network in parallel with the other tasks right at the beginning of a new server tick, thus reducing the overall time. To keep the game synchronized, both tasks wait on each other until they are finished before the tick ends.
 
-## 🗣️ Supported Languages
-
-*   English
-*   German
-
-## 🧩 Dependencies
-
-*   [DragonLib 2](https://github.com/MisterJulsen/MC-DragonLib2)
-*   [GeckoLib](https://www.curseforge.com/minecraft/mc-mods/geckolib)
+Extensive tests on a large server with nearly 500 trains and a total of 200 mods have shown that this improves performance significantly.
 
 ## ⚠️ Please note!
+To protect your world from damage, you should always create a backup of your world before installing an update of this mod. Alpha versions in particular may contain critical bugs!
 
-To protect your world from damage, you should always create a backup of your world before installing an update of any mod. Alpha versions in particular may contain critical bugs!
-
-## 💚 Special Thanks
-
-To **Moritz Walter** who suggested the name of the mod
-
-## 🤗 Contribute to this project
-
-Feel free to help with development and translation by creating pull requests or issues on GitHub or Discord.
+[![Discord](https://i.imgur.com/YnDoeHs.png)](https://discord.gg/AeSbNgvc7f)
+[![Donate](https://i.imgur.com/dyAPUNT.png)](https://paypal.me/MrJulsen)

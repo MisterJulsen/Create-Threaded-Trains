@@ -1,4 +1,6 @@
-A **server-side only** mod that runs all calculations of the railway network on a **separate thread** parallel to the server tick, which greatly improves performance, especially in large networks.
+A small mod that runs all calculations of the railway network on a **separate thread** parallel to the server tick, which greatly improves performance, especially in large networks.
+
+This mod is server-side only, but it can also be used on the client-side (if you are playing in singleplayer).
 
 <img width="2430" height="757" alt="comparison" src="https://github.com/user-attachments/assets/366bda07-5e2f-49f2-a313-af1e70660617" />
 
@@ -15,3 +17,6 @@ Extensive tests on a large server with nearly 500 trains and a total of 200 mods
 
 ## ⚠️ Please note!
 To protect your world from damage, you should always create a backup of your world before installing an update of this mod. Alpha versions in particular may contain critical bugs!
+
+[![Discord](https://i.imgur.com/YnDoeHs.png)](https://discord.gg/AeSbNgvc7f)
+[![Donate](https://i.imgur.com/dyAPUNT.png)](https://paypal.me/MrJulsen)

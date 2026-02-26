@@ -22,28 +22,28 @@ public class TrainMixin {
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/List;forEach(Ljava/util/function/Consumer;)V"), remap = false)
     private void onTickTrain(List<Carriage> carriages, Consumer<? super Carriage> consumer, Level level) {
-        CreateThreadedTrains.getServer().ifPresent(x -> x.execute(() -> {            
+        CreateThreadedTrains.runSafelyOnMain(() -> {            
             for (Carriage c : carriages) {
                 c.manageEntities(level);
             }
-        }));
+        });
     }
     
     @PlatformOnly(PlatformOnly.FORGE)
     @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;m_254849_", remap = false))
     private Explosion redirectTrainExplosionForge(Level level, Entity source, double x, double y, double z, float power, ExplosionInteraction interaction) {
-        CreateThreadedTrains.getServer().ifPresent(s -> s.execute(() -> {            
+        CreateThreadedTrains.runSafelyOnMain(() -> {            
             level.explode(source, x, y, z, power, interaction);
-        }));
+        });
         return null; // Not needed, because Create doesn't use the explosion result.
     }  
     
     @PlatformOnly(PlatformOnly.FABRIC)
     @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1937;method_8437", remap = false))
     private Explosion redirectTrainExplosionFabric(Level level, Entity source, double x, double y, double z, float power, ExplosionInteraction interaction) {
-        CreateThreadedTrains.getServer().ifPresent(s -> s.execute(() -> {            
+        CreateThreadedTrains.runSafelyOnMain(() -> {            
             level.explode(source, x, y, z, power, interaction);
-        }));
+        });
         return null; // Not needed, because Create doesn't use the explosion result.
     }        
 }

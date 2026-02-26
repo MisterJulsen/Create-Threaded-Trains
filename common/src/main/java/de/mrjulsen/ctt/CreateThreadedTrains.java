@@ -2,11 +2,14 @@ package de.mrjulsen.ctt;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.Create;
+import de.mrjulsen.ctt.commands.CTTCommands;
+import dev.architectury.event.events.common.CommandRegistrationEvent;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.Queue;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 
@@ -16,42 +19,137 @@ public final class CreateThreadedTrains {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     private static MinecraftServer serverInstance;
-    private static WorkerThread thread;
-    private static Future<?> future;
+    private static final ReentrantLock RAILWAYS_LOCK = new ReentrantLock();
+    private static final Queue<Future<?>> tasks = new ConcurrentLinkedQueue<>();
 
-    public static void init() {}
+    private static Thread globalRailwayThread;
+    private static Thread ioThread;
+
+    public static void init() {        
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            LOGGER.error("Thread crashed in " + t.getName(), e);
+        });
+
+        CommandRegistrationEvent.EVENT.register((dispatcher, context, selection) -> {
+            CTTCommands.register(dispatcher, selection);
+        });
+    }
     
+    private static ExecutorService globalRailwayExecutor;
+    private static ExecutorService ioExecutor;
+
+    private static boolean isShuttingDown = false;
+
+    private static long lastTickTime;
+    private static long avgTickTime;
+
+    public static void setTickTime(long l) {
+        lastTickTime = l;
+        if (avgTickTime == 0) {
+            avgTickTime = lastTickTime;
+        } else {
+            avgTickTime += lastTickTime;
+            avgTickTime /= 2;
+        }
+    }
+
+    public static long getLastTickTime() {
+        return lastTickTime;
+    }
+
+    public static long getAvgTickTime() {
+        return avgTickTime;
+    }
+
+    public static void clearAvgTickTime() {
+        avgTickTime = 0;
+    }
+
 
     public static void start(MinecraftServer server) {
         serverInstance = server;
-        future = null;
-        thread = new WorkerThread("Train Worker");
+        isShuttingDown = false;
+
+        globalRailwayExecutor = Executors.newSingleThreadExecutor(r -> {
+            globalRailwayThread = new Thread(r, "Train Worker");
+            globalRailwayThread.setDaemon(true);
+            return globalRailwayThread;
+        });
+
+        ioExecutor = Executors.newSingleThreadExecutor(r -> {
+            ioThread = new Thread(r, "Global Railway Manager IO Worker");
+            ioThread.setDaemon(true);
+            return ioThread;
+        });
     }
 
     public static void stop(MinecraftServer server) {
-        thread.shutdown();
-        future = null;
+        isShuttingDown = true;
+        globalRailwayExecutor.shutdown();
+        ioExecutor.shutdown();
+
+        try {
+            globalRailwayExecutor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            ioExecutor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         serverInstance = null;
     }
 
     public static void preTick(MinecraftServer server) {
-        CreateThreadedTrains.future = CreateThreadedTrains.thread.submitTask(() -> {
+        submitRailwayManagerAsync(() -> {
             Create.RAILWAYS.tick(server.overworld());
         });
     }
 
     public static void postTick(MinecraftServer server) {
-        if (CreateThreadedTrains.future != null) {
-            try {
-                CreateThreadedTrains.future.get();
-            } catch (InterruptedException | ExecutionException e) {
-                LOGGER.warn("Error while waiting for train worker.", e);
+        try {
+            while (!tasks.isEmpty()) {
+                tasks.poll().get();
             }
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.warn("Error while waiting for train worker.", e);
+        }
+    }
+
+    public static void submitRailwayManagerAsync(Runnable task) {
+        if (!isShuttingDown && globalRailwayExecutor != null && !globalRailwayExecutor.isShutdown()) {
+            tasks.add(globalRailwayExecutor.submit(task));
+        }
+    }
+
+    public static void submitAsyncIO(Runnable task) {
+        if (!isShuttingDown && ioExecutor != null && !ioExecutor.isShutdown()) {
+            ioExecutor.submit(task);
         }
     }
 
     public static Optional<MinecraftServer> getServer() {
         return Optional.ofNullable(serverInstance);
+    }
+
+    public static boolean isOnWorkerThread() {
+        return Thread.currentThread() == globalRailwayThread;
+    }
+
+    public static void runSafelyOnMain(Runnable r) {
+        MinecraftServer srv = serverInstance;
+        if (srv == null) return;
+
+        RAILWAYS_LOCK.lock();
+        try {
+            srv.execute(r);
+        } catch (Exception e) {
+            LOGGER.warn("Error while executing tasks on the server thread.", e);
+        } finally {
+            RAILWAYS_LOCK.unlock();
+        }
     }
 
 }

@@ -16,16 +16,16 @@ public class CarriageMixin {
     @PlatformOnly(PlatformOnly.FORGE)
     @Redirect(method = "travel", remap = false, at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/entity/Carriage;manageEntities(Lnet/minecraft/world/level/Level;)V", remap = false))
     public void onTravelForge(Carriage carriage, Level level) {
-        CreateThreadedTrains.getServer().ifPresent(x -> x.execute(() -> {
+        CreateThreadedTrains.runSafelyOnMain(() -> {
             carriage.manageEntities(level);
-        }));
+        });
     }
     
     @PlatformOnly(PlatformOnly.FABRIC)
     @Redirect(method = "travel", remap = false, at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/trains/entity/Carriage;manageEntities(Lnet/minecraft/class_1937;)V", remap = false))
     public void onTravelFabric(Carriage carriage, Level level) {
-        CreateThreadedTrains.getServer().ifPresent(x -> x.execute(() -> {
+        CreateThreadedTrains.runSafelyOnMain(() -> {
             carriage.manageEntities(level);
-        }));
+        });
     }
 }

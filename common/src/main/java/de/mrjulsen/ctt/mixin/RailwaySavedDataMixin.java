@@ -3,7 +3,7 @@ package de.mrjulsen.ctt.mixin;
 import java.util.Map;
 import java.util.UUID;
 
-import de.mrjulsen.ctt.NullSafeConcurrentMap;
+import de.mrjulsen.ctt.util.NullSafeConcurrentMap;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

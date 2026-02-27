@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.simibubi.create.content.trains.graph.EdgePointStorage;
 import com.simibubi.create.content.trains.graph.EdgePointType;
 import com.simibubi.create.content.trains.signal.TrackEdgePoint;
-import de.mrjulsen.ctt.NullSafeConcurrentMap;
+import de.mrjulsen.ctt.util.NullSafeConcurrentMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

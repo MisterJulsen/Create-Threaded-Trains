@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 
-import de.mrjulsen.ctt.CreateThreadedTrains;
+import de.mrjulsen.ctt.util.CreateThreadedTrains;
 import dev.architectury.injectables.annotations.PlatformOnly;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;

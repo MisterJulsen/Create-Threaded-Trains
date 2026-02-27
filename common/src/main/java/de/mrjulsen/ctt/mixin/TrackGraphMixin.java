@@ -1,7 +1,8 @@
 package de.mrjulsen.ctt.mixin;
 
 import com.simibubi.create.content.trains.graph.*;
-import de.mrjulsen.ctt.NullSafeConcurrentMap;
+import de.mrjulsen.ctt.ConcurrentList;
+import de.mrjulsen.ctt.util.NullSafeConcurrentMap;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +31,6 @@ public class TrackGraphMixin {
         this.bounds = new NullSafeConcurrentMap<>();
         this.connectionsByNode = Collections.synchronizedMap(new IdentityHashMap<>());
         this.edgePoints = new EdgePointStorage();
-        this.deferredIntersectionUpdates = Collections.synchronizedList(new ArrayList<>());
+        this.deferredIntersectionUpdates = new ConcurrentList<>();
     }
 }

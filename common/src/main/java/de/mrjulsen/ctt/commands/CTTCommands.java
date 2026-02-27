@@ -3,11 +3,11 @@ package de.mrjulsen.ctt.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import de.mrjulsen.ctt.CreateThreadedTrains;
+import de.mrjulsen.ctt.util.CreateThreadedTrains;
+import de.mrjulsen.ctt.config.ModServerConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.TimeUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +17,7 @@ public class CTTCommands {
     private static final String SUB_LAST_TICK_TIME = "lastTickTime";
     private static final String SUB_AVG_TICK_TIME = "avgTickTime";
     private static final String SUB_CLEAR_AVG_TICK_TIME = "clearAvgTickTime";
+    private static final String SUB_TOGGLE_SYNC = "toggleSync";
 
 
     @SuppressWarnings("all")
@@ -31,6 +32,10 @@ public class CTTCommands {
                 )
                 .then(Commands.literal(SUB_CLEAR_AVG_TICK_TIME)
                         .executes(x -> clearAvgTickTime(x.getSource()))
+                )
+                .then(Commands.literal(SUB_TOGGLE_SYNC)
+                        .requires(stack -> stack.hasPermission(4))
+                        .executes(x -> toggleSync(x.getSource()))
                 );
 
         dispatcher.register(builder);
@@ -49,6 +54,13 @@ public class CTTCommands {
     private static int clearAvgTickTime(CommandSourceStack cmd) throws CommandSyntaxException {
         cmd.sendSuccess(() -> Component.literal("Cleared the average railway tick time."), true);
         CreateThreadedTrains.clearAvgTickTime();
+        return 1;
+    }
+
+    private static int toggleSync(CommandSourceStack cmd) throws CommandSyntaxException {
+        ModServerConfig.SYNC_WITH_SERVER_TICK.set(!ModServerConfig.SYNC_WITH_SERVER_TICK.get());
+        ModServerConfig.SPEC.save();
+        cmd.sendSuccess(() -> Component.literal("Toggled railway manager and server sync. It is now turned " + (ModServerConfig.SYNC_WITH_SERVER_TICK.get() ? "ON" : "OFF")), true);
         return 1;
     }
 }

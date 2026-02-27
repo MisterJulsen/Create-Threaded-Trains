@@ -1,9 +1,9 @@
-package de.mrjulsen.ctt;
+package de.mrjulsen.ctt.util;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.Create;
-import de.mrjulsen.ctt.commands.CTTCommands;
-import dev.architectury.event.events.common.CommandRegistrationEvent;
+import de.mrjulsen.ctt.CTTCrossPlatform;
+import de.mrjulsen.ctt.config.ModServerConfig;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.Optional;
@@ -25,23 +25,23 @@ public final class CreateThreadedTrains {
     private static Thread globalRailwayThread;
     private static Thread ioThread;
 
-    public static void init() {        
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            LOGGER.error("Thread crashed in " + t.getName(), e);
-        });
-
-        CommandRegistrationEvent.EVENT.register((dispatcher, context, selection) -> {
-            CTTCommands.register(dispatcher, selection);
-        });
-    }
-    
     private static ExecutorService globalRailwayExecutor;
     private static ExecutorService ioExecutor;
+
+    public static boolean serverTickScheduled = true;
+    public static boolean railwayTickScheduled = true;
 
     private static boolean isShuttingDown = false;
 
     private static long lastTickTime;
     private static long avgTickTime;
+
+    public static void init() {
+        CTTCrossPlatform.registerConfig();
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            LOGGER.error("Thread crashed in " + t.getName(), e);
+        });
+    }
 
     public static void setTickTime(long l) {
         lastTickTime = l;
@@ -85,30 +85,48 @@ public final class CreateThreadedTrains {
 
     public static void stop(MinecraftServer server) {
         isShuttingDown = true;
+        LOGGER.info("[CTT] Stopping global railway worker thread...");
         globalRailwayExecutor.shutdown();
-        ioExecutor.shutdown();
-
         try {
             globalRailwayExecutor.awaitTermination(1, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        LOGGER.info("[CTT] Stopped global railway worker thread!");
+        LOGGER.info("[CTT] Stopping global railway IO worker thread...");
+        ioExecutor.shutdown();
         try {
             ioExecutor.awaitTermination(1, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        LOGGER.info("[CTT] Stopped global railway IO worker thread!");
         serverInstance = null;
     }
 
     public static void preTick(MinecraftServer server) {
+        serverTickScheduled = false;
+        railwayTickScheduled = false;
         submitRailwayManagerAsync(() -> {
-            Create.RAILWAYS.tick(server.overworld());
+            try {
+                Create.RAILWAYS.tick(server.overworld());
+            } catch (Throwable throwable) {
+                LOGGER.error("Error while executing railway manager tick.", throwable);
+            } finally {
+                railwayTickScheduled = true;
+                if (!ModServerConfig.SYNC_WITH_SERVER_TICK.get()) {
+                    if (serverTickScheduled) {
+                        preTick(server);
+                    }
+                }
+            }
         });
     }
 
     public static void postTick(MinecraftServer server) {
+        if (!ModServerConfig.SYNC_WITH_SERVER_TICK.get()) {
+            return;
+        }
         try {
             while (!tasks.isEmpty()) {
                 tasks.poll().get();
@@ -120,13 +138,20 @@ public final class CreateThreadedTrains {
 
     public static void submitRailwayManagerAsync(Runnable task) {
         if (!isShuttingDown && globalRailwayExecutor != null && !globalRailwayExecutor.isShutdown()) {
-            tasks.add(globalRailwayExecutor.submit(task));
+            Future<?> fut = (globalRailwayExecutor.submit(task));
+            if (ModServerConfig.SYNC_WITH_SERVER_TICK.get()) {
+                tasks.add(fut);
+            }
+        } else {
+            task.run();
         }
     }
 
     public static void submitAsyncIO(Runnable task) {
         if (!isShuttingDown && ioExecutor != null && !ioExecutor.isShutdown()) {
             ioExecutor.submit(task);
+        } else {
+            task.run();
         }
     }
 

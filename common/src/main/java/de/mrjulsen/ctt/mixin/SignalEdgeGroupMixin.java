@@ -2,7 +2,7 @@ package de.mrjulsen.ctt.mixin;
 
 import com.simibubi.create.content.trains.entity.Train;
 import com.simibubi.create.content.trains.signal.SignalEdgeGroup;
-import de.mrjulsen.ctt.NullSafeConcurrentMap;
+import de.mrjulsen.ctt.util.NullSafeConcurrentMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

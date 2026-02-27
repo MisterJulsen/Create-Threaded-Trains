@@ -9,5 +9,6 @@ loom {
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"   
     modImplementation("com.simibubi.create:create-fabric-${rootProject.minecraft_version}:${rootProject.create_fabric_version}")
-    modImplementation(include("dev.architectury:architectury-fabric:${rootProject.architectury_api_version}"))
+    modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${rootProject.forge_config_api_port_version}"
+
 }

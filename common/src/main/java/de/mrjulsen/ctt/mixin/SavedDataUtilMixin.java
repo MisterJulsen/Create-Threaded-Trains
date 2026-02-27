@@ -3,7 +3,7 @@ package de.mrjulsen.ctt.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.utility.SavedDataUtil;
-import de.mrjulsen.ctt.util.CreateThreadedTrains;
+import de.mrjulsen.ctt.CreateThreadedTrains;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;

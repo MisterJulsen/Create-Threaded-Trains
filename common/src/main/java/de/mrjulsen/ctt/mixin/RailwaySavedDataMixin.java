@@ -25,7 +25,7 @@ public abstract class RailwaySavedDataMixin {
     @Shadow private Map<UUID, Train> trains;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void onInit(CallbackInfo ci) {
+    private void ctt$init(CallbackInfo ci) {
         this.trackNetworks = new NullSafeConcurrentMap<>();
         this.signalEdgeGroups = new NullSafeConcurrentMap<>();
         this.trains = new NullSafeConcurrentMap<>();

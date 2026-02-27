@@ -3,6 +3,7 @@ package de.mrjulsen.ctt.mixin;
 import java.util.List;
 import java.util.function.Consumer;
 
+import de.mrjulsen.ctt.CreateThreadedTrains;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -10,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import com.simibubi.create.content.trains.entity.Carriage;
 import com.simibubi.create.content.trains.entity.Train;
 
-import de.mrjulsen.ctt.util.CreateThreadedTrains;
 import dev.architectury.injectables.annotations.PlatformOnly;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
@@ -21,8 +21,8 @@ import net.minecraft.world.level.Level.ExplosionInteraction;
 public class TrainMixin {
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/List;forEach(Ljava/util/function/Consumer;)V"), remap = false)
-    private void onTickTrain(List<Carriage> carriages, Consumer<? super Carriage> consumer, Level level) {
-        CreateThreadedTrains.runSafelyOnMain(() -> {            
+    private void ctt$trainTick(List<Carriage> carriages, Consumer<? super Carriage> consumer, Level level) {
+        CreateThreadedTrains.runSafelyOnMain(() -> {
             for (Carriage c : carriages) {
                 c.manageEntities(level);
             }
@@ -31,7 +31,7 @@ public class TrainMixin {
     
     @PlatformOnly(PlatformOnly.FORGE)
     @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;m_254849_", remap = false))
-    private Explosion redirectTrainExplosionForge(Level level, Entity source, double x, double y, double z, float power, ExplosionInteraction interaction) {
+    private Explosion ctt$trainExplodeForge(Level level, Entity source, double x, double y, double z, float power, ExplosionInteraction interaction) {
         CreateThreadedTrains.runSafelyOnMain(() -> {            
             level.explode(source, x, y, z, power, interaction);
         });
@@ -40,7 +40,7 @@ public class TrainMixin {
     
     @PlatformOnly(PlatformOnly.FABRIC)
     @Redirect(method = "collideWithOtherTrains", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/class_1937;method_8437", remap = false))
-    private Explosion redirectTrainExplosionFabric(Level level, Entity source, double x, double y, double z, float power, ExplosionInteraction interaction) {
+    private Explosion ctt$trainExplodeFabric(Level level, Entity source, double x, double y, double z, float power, ExplosionInteraction interaction) {
         CreateThreadedTrains.runSafelyOnMain(() -> {            
             level.explode(source, x, y, z, power, interaction);
         });

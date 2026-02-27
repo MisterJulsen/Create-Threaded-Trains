@@ -22,7 +22,7 @@ public class SignalEdgeGroupMixin {
     @Shadow public Set<UUID> adjacent;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void onInit(CallbackInfo ci) {
+    private void ctt$init(CallbackInfo ci) {
         this.trains = ConcurrentHashMap.newKeySet();
         this.intersecting = new NullSafeConcurrentMap<>();
         this.intersectingResolved = ConcurrentHashMap.newKeySet();

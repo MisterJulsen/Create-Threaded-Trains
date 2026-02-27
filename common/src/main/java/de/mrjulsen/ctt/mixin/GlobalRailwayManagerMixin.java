@@ -1,7 +1,7 @@
 package de.mrjulsen.ctt.mixin;
 
 import com.simibubi.create.content.trains.entity.Train;
-import de.mrjulsen.ctt.ConcurrentList;
+import de.mrjulsen.ctt.util.ConcurrentList;
 import de.mrjulsen.ctt.util.NullSafeConcurrentMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +20,7 @@ public abstract class GlobalRailwayManagerMixin {
     @Shadow private List<Train> waitingTrains;
 
     @Inject(method = "cleanUp", remap = false, at = @At("RETURN"))
-    private void onCleanup(CallbackInfo ci) {
+    private void ctt$cleanUp(CallbackInfo ci) {
         GlobalRailwayManager self = (GlobalRailwayManager)(Object)this;
 		self.trackNetworks = new NullSafeConcurrentMap<>();
 		self.signalEdgeGroups = new NullSafeConcurrentMap<>();

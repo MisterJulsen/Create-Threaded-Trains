@@ -1,4 +1,4 @@
-package de.mrjulsen.ctt;
+package de.mrjulsen.ctt.util;
 
 import java.util.*;
 import java.util.concurrent.locks.StampedLock;

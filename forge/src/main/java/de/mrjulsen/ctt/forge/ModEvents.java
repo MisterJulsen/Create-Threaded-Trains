@@ -1,5 +1,5 @@
 package de.mrjulsen.ctt.forge;
-import de.mrjulsen.ctt.util.CreateThreadedTrains;
+import de.mrjulsen.ctt.CreateThreadedTrains;
 import de.mrjulsen.ctt.commands.CTTCommands;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;

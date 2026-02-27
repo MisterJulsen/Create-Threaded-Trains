@@ -1,7 +1,7 @@
 package de.mrjulsen.ctt.mixin;
 
 import com.simibubi.create.content.trains.graph.*;
-import de.mrjulsen.ctt.ConcurrentList;
+import de.mrjulsen.ctt.util.ConcurrentList;
 import de.mrjulsen.ctt.util.NullSafeConcurrentMap;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;

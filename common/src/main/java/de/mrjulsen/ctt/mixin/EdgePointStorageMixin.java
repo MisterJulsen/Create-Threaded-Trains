@@ -22,7 +22,7 @@ public class EdgePointStorageMixin {
     @Shadow private Map<EdgePointType<?>, Map<UUID, TrackEdgePoint>> pointsByType;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void init(CallbackInfo ci) {
+    private void ctt$init(CallbackInfo ci) {
         this.pointsByType = new NullSafeConcurrentMap<>();
     }
 
@@ -34,7 +34,7 @@ public class EdgePointStorageMixin {
                     target = "Ljava/util/Map;computeIfAbsent(Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;"
             )
     )
-    private Object wrapComputeIfAbsent(Map<EdgePointType<?>, Map<UUID, TrackEdgePoint>> instance, Object type, Function<?, ?> original, Operation<Object> operation) {
+    private Object ctt$wrapComputeIfAbsent(Map<EdgePointType<?>, Map<UUID, TrackEdgePoint>> instance, Object type, Function<?, ?> original, Operation<Object> operation) {
         return instance.computeIfAbsent(
                 (EdgePointType<?>) type,
                 t -> new NullSafeConcurrentMap<>()

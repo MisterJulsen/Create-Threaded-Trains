@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.mrjulsen.ctt.util.CreateThreadedTrains;
+import de.mrjulsen.ctt.CreateThreadedTrains;
 import net.minecraft.server.MinecraftServer;
 
 @Mixin(MinecraftServer.class)

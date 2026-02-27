@@ -1,6 +1,6 @@
 package de.mrjulsen.ctt.fabric;
 
-import de.mrjulsen.ctt.util.CreateThreadedTrains;
+import de.mrjulsen.ctt.CreateThreadedTrains;
 import de.mrjulsen.ctt.commands.CTTCommands;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;

@@ -1,6 +1,6 @@
 package de.mrjulsen.ctt.fabric;
 
-import de.mrjulsen.ctt.util.CreateThreadedTrains;
+import de.mrjulsen.ctt.CreateThreadedTrains;
 import de.mrjulsen.ctt.config.ModServerConfig;
 import fuzs.forgeconfigapiport.impl.config.ForgeConfigRegistryImpl;
 import net.minecraftforge.fml.config.ModConfig;

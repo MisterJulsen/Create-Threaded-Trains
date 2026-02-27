@@ -1,6 +1,6 @@
 package de.mrjulsen.ctt.forge;
 
-import de.mrjulsen.ctt.util.CreateThreadedTrains;
+import de.mrjulsen.ctt.CreateThreadedTrains;
 import de.mrjulsen.ctt.config.ModServerConfig;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;

@@ -1,8 +1,7 @@
-package de.mrjulsen.ctt.util;
+package de.mrjulsen.ctt;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.Create;
-import de.mrjulsen.ctt.CTTCrossPlatform;
 import de.mrjulsen.ctt.config.ModServerConfig;
 import net.minecraft.server.MinecraftServer;
 
